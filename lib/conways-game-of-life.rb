@@ -27,14 +27,7 @@ def generate_next_gen(grid)
   # This method seems to be the best place to drive the overall script.
   @gen1_grid = Marshal.load(Marshal.dump(grid))
   @gen1_grid.each do |key, value|
-    puts ""
-    puts " current zone "
-    puts "#{key} \t #{value}"
-    puts ""
     neighbor_scan(key, value)
-
-    # break # TO REMOVE
-    # neighbor_scan(key)
   end
 
 
@@ -68,17 +61,38 @@ def neighbor_scan(coordinates, zone_value)
       scanned_values << value if key == sc
     end
   end
-  puts " scanned values "
+  evaluation = game_rules(scanned_values, current_zone)
   puts ""
-  puts scanned_values
-  puts ""
-  puts ""
-  puts ""
-
+  puts " evaluation "
+  puts evaluation
  
 
 end
 
+def game_rules(scanned_values, current_zone)
+  value_count = scanned_values.tally
+  puts ""
+  puts " value count "
+  puts value_count
+  x_count = value_count["X"].to_i
+  o_count = value_count["O"].to_i
+  puts x_count.to_s + " x"
+  puts o_count.to_s + " o"
+  # Guard clause seems appropriate
+  return current_zone = "O" if current_zone == "X" && o_count == 3
+  if current_zone == "O"
+    case o_count
+    when 1
+      current_zone = "X"
+    when 2..3
+      current_zone
+    when 4..8
+      current_zone = "X"
+    else " ERROR "
+    end
+  end
+  return current_zone
+end
 
 #rudimentary UI
 
@@ -147,5 +161,5 @@ puts "\t\t" + g1_bottom_row
   # DONE - Then remove from the collection anything with a "2"
   # DONE - Use the remaining collection as coordinates to check zone values
   # DONE - Push zone values into a different collection and total instances of O and X
-  # compare to the rules
+  # compare counts of values to the rules
   # use compare results to modify the zone accordingly to O and X
