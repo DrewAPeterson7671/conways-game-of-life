@@ -3,23 +3,27 @@
 # remember that the off-by-one error is a factor here
 
 # scan_template = [[-1, 1], [0, 1], [1, 1],
-# [-1, 0], [0, 0], [1, 0],
-# [-1, -1], [0, -1], [1, -1]]
+                # [-1, 0], [0, 0], [1, 0],
+                # [-1, -1], [0, -1], [1, -1]]
 
-board_grid = { "-1, 1" => "O", "0, 1" => "X", "1, 1" => "X", "-1, 0" => "X", "0, 0" => "O", "1, 0" => "O", "-1, -1" => "O", "0, -1" => "O", "1, -1" => "X" }
+@board_grid = { "-1, 1" => "O", "0, 1" => "X", "1, 1" => "X", 
+              "-1, 0" => "X", "0, 0" => "O", "1, 0" => "O", 
+              "-1, -1" => "O", "0, -1" => "O", "1, -1" => "X" }
 
 g1_top_row = ""; g1_mid_row = ""; g1_bottom_row = ""
 top_row = ""; mid_row = ""; bottom_row = ""
 
 def generate_next_gen(grid)
-  # I'd prefer not to destructively alter the original board_grid for visual verfication
+  # I'd prefer not to destructively alter the original @board_grid for visual verfication
   # I don't like using "gen1_grid" as a name, wanted to make it flexible for multiple generation uses
   @gen1_grid = Marshal.load(Marshal.dump(grid))
   @gen1_grid.each do |key, value|
+    puts ""
     puts " current zone "
     puts "#{key} \t #{value}"
-    neighbor_scan(key, value)
     puts ""
+    neighbor_scan(key, value)
+
     # break # TO REMOVE
     # neighbor_scan(key)
   end
@@ -32,6 +36,7 @@ def neighbor_scan(coordinates, zone_value)
                   [-1, 0], [1, 0],
                   [-1, -1], [0, -1], [1, -1]]
   scan_coordinates = []
+  scanned_values = []
   current_zone = coordinates.split(", ")
   scan_template.each do |st|
     st[0] = st[0] + current_zone[0].to_i
@@ -41,11 +46,15 @@ def neighbor_scan(coordinates, zone_value)
   filter_template.each do |ft|
     scan_coordinates << ft.join(", ")
   end
+  scan_coordinates.each do |sc|
+    @board_grid.select do |key, value| 
+      scanned_values << value if key == sc
+    end
+  end
+  puts " scanned values "
   puts ""
-  puts " filter_template "
-  puts filter_template
+  puts scanned_values
   puts ""
-  puts scan_coordinates
   puts ""
   puts ""
   # ok, shift zero to the center zone of the grid, so the same method will for for checking all adjacent
@@ -69,7 +78,7 @@ system("clear")
 puts "\t\tGen 0\n"
 puts ""
 
-board_grid.each_with_index do |(key, value), i|
+@board_grid.each_with_index do |(key, value), i|
   # There's got to be a better way to do this
   case i
   when 0..1
@@ -96,7 +105,7 @@ puts "\t\t" + bottom_row
 puts "\t\tGen 1\n"
 puts ""
 
-generate_next_gen(board_grid)
+generate_next_gen(@board_grid)
 
 @gen1_grid.each_with_index do |(key, value), i|
   case i
