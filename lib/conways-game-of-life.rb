@@ -65,10 +65,8 @@ def neighbor_scan(coordinates, zone_value)
   puts ""
   puts " original zone value "
   puts zone_value
-  puts ""
   puts " evaluation "
   game_rules(scanned_values, current_zone, zone_value)
-  2.times { puts "" }
 
  
 
@@ -76,33 +74,31 @@ end
 
 def game_rules(scanned_values, current_zone, zone_value)
   value_count = scanned_values.tally
-  puts ""
   puts " value count "
   puts value_count
   puts " current_zone "
-  puts current_zone
+  puts current_zone.inspect
   puts " game rules zone value "
-  puts zone_value
+  puts zone_value.inspect
   x_count = value_count["X"].to_i
   o_count = value_count["O"].to_i
-  # Guard clause seems appropriate
-  return zone_value = "O" if current_zone == "X" && o_count == 3
-  if current_zone == "O"
+  # Guard clause seems appropriate  ## Problem!!!
+  new_zone_value = zone_value
+  new_zone_value = "O" if zone_value == "X" && o_count == 3
+  if zone_value == "O"
     case o_count
     when 1
-      puts "!!!! no change"
-      zone_value = "X"
+      new_zone_value = "X"
     when 2..3
-      puts "!!!! change !!!!"
-      zone_value = "O"
+      new_zone_value = "O"
     when 4..8
-      puts "!!!! no change"
-      zone_value = "X"
+      new_zone_value = "X"
     else puts " ERROR "
     end
   end
-  puts zone_value
-  return zone_value
+  puts " output zone value "
+  puts new_zone_value
+  return new_zone_value
 end
 
 #rudimentary UI
