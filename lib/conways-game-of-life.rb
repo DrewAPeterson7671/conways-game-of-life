@@ -16,9 +16,11 @@ def generate_next_gen(grid)
   # I don't like using "gen1_grid" as a name, wanted to make it flexible for multiple generation uses
   @gen1_grid = Marshal.load(Marshal.dump(grid))
   @gen1_grid.each do |key, value|
+    puts " current zone "
     puts "#{key} \t #{value}"
     neighbor_scan(key, value)
-    break # TO REMOVE
+    puts ""
+    # break # TO REMOVE
     # neighbor_scan(key)
   end
     
@@ -39,10 +41,13 @@ def neighbor_scan(coordinates, zone_value)
   filter_template.each do |ft|
     scan_coordinates << ft.join(", ")
   end
+  puts ""
   puts " filter_template "
   puts filter_template
   puts ""
   puts scan_coordinates
+  puts ""
+  puts ""
   # ok, shift zero to the center zone of the grid, so the same method will for for checking all adjacent
   # Move that into a collection
   # Then remove from the collection anything with a "2"
