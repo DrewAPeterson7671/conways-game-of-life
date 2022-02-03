@@ -40,6 +40,7 @@ def neighbor_scan(coordinates, zone_value)
   scan_coordinates = []
   scanned_values = []
 
+
   current_zone = coordinates.split(", ")  
   # takes the argument for the zone we are currently in
   scan_template.each do |st| 
@@ -61,37 +62,47 @@ def neighbor_scan(coordinates, zone_value)
       scanned_values << value if key == sc
     end
   end
-  evaluation = game_rules(scanned_values, current_zone)
+  puts ""
+  puts " original zone value "
+  puts zone_value
   puts ""
   puts " evaluation "
-  puts evaluation
+  game_rules(scanned_values, current_zone, zone_value)
+  2.times { puts "" }
+
  
 
 end
 
-def game_rules(scanned_values, current_zone)
+def game_rules(scanned_values, current_zone, zone_value)
   value_count = scanned_values.tally
   puts ""
   puts " value count "
   puts value_count
+  puts " current_zone "
+  puts current_zone
+  puts " game rules zone value "
+  puts zone_value
   x_count = value_count["X"].to_i
   o_count = value_count["O"].to_i
-  puts x_count.to_s + " x"
-  puts o_count.to_s + " o"
   # Guard clause seems appropriate
-  return current_zone = "O" if current_zone == "X" && o_count == 3
+  return zone_value = "O" if current_zone == "X" && o_count == 3
   if current_zone == "O"
     case o_count
     when 1
-      current_zone = "X"
+      puts "!!!! no change"
+      zone_value = "X"
     when 2..3
-      current_zone
+      puts "!!!! change !!!!"
+      zone_value = "O"
     when 4..8
-      current_zone = "X"
-    else " ERROR "
+      puts "!!!! no change"
+      zone_value = "X"
+    else puts " ERROR "
     end
   end
-  return current_zone
+  puts zone_value
+  return zone_value
 end
 
 #rudimentary UI
