@@ -1,23 +1,26 @@
 
-# lets display the grid first and see how that looks
-# remember that the off-by-one error is a factor here
+# First I wanted to make the display of the grids for visual confirmation
+# If you look to my git history, I used puts to display each step and confirm it before proceeding
+# I was very wary of off-by-one error potential at every step
 
-# scan_template = [[-1, 1], [0, 1], [1, 1],
-                # [-1, 0], [0, 0], [1, 0],
-                # [-1, -1], [0, -1], [1, -1]]
-
-# Originally was going to use an array of arrays, then after I stepped away from it,
-# I realized that I would have to have corner zone methods to check the surrounding values, 
-# side middle (such as -1, 0) methods and a middle method.  And those methods would have to rotate
-# 90 degrees as well.  
-# Then I realized that it, if I could make the center zone 0,0, then I just have to reject any 
-# out-of-bounds on a single 360 degree scan on each zone because every one of them would have a
-# 2 coordinate and I can filter out those.
+# Originally, I was going to use an array of arrays, then after I stepped away from it for a few hours,
+# I realized that I would have to have methods to check the surrounding neighbor values of corners zones (such as 
+# the upper left corner), side middle zone (the middle X in the left side column) methods and a middle
+# zone method.  And those methods (except for middle zone) would have to rotate 90 degrees for 
+# each counterpart.  I needed a deeper abstraction.  The only simple perimeter scan of zone values 
+# would be the middle zone because it scans 360 degrees around without looking outside of the bounds.  
+# It seemed to me the best way was to find a way to make a single 360 scan method.  But how to deal 
+# with the scan looking out of the boundaries of the game?  I stepped away from coding to dinner 
+# and it I came up with a solution.  If Then I realized that, if I could make the center zone 0,0, 
+# then I just have to reject any out-of-bounds on a single 360 degree scan on each zone because the 
+# out of bounds zone would automatically have a absolute value of 2.  And that could be filtered out, covering all directions. 
 # So that made it essential to use a hash.
+
 @board_grid = { "-1, 1" => "O", "0, 1" => "X", "1, 1" => "X", 
               "-1, 0" => "X", "0, 0" => "O", "1, 0" => "O", 
               "-1, -1" => "O", "0, -1" => "O", "1, -1" => "X" }
 
+# Variables to aid in a rudimentary UI
 g1_top_row = ""; g1_mid_row = ""; g1_bottom_row = ""
 top_row = ""; mid_row = ""; bottom_row = ""
 
@@ -27,10 +30,10 @@ def generate_next_gen(grid)
   # This method seems to be the best place to drive the overall script.
   @gen1_grid = Marshal.load(Marshal.dump(grid))
   @gen1_grid.each do |key, value|
-    neighbor_scan(key, value)
+    new_value = neighbor_scan(key, value)
+    # Here is where the new value replaces the old values
+    @gen1_grid[key] = new_value
   end
-
-
 end
 
 def neighbor_scan(coordinates, zone_value)
@@ -45,7 +48,9 @@ def neighbor_scan(coordinates, zone_value)
   # takes the argument for the zone we are currently in
   scan_template.each do |st| 
     # the scan_template checks each zone of the perimeter from 0,0.  
-    # This block adds the current coordinates to the scan template to scan each zone.
+    # This block adds the current coordinates to the scan template coordinates 
+    # to scan each zone for 360, regardless if that is out of bounds
+    # On a refactor, It seems there might be a way eliminated out-of-bounds values here
     st[0] = st[0] + current_zone[0].to_i
     st[1] = st[1] + current_zone[1].to_i
   end
@@ -62,51 +67,38 @@ def neighbor_scan(coordinates, zone_value)
       scanned_values << value if key == sc
     end
   end
-  puts ""
-  puts " original zone value "
-  puts zone_value
-  puts " evaluation "
+  # I am passing the zone_value through without using it.  
+  # On a refactor, I would like to see if that is avoidable.
   game_rules(scanned_values, current_zone, zone_value)
-
- 
-
 end
 
 def game_rules(scanned_values, current_zone, zone_value)
+  # This value_count seems inefficient.  I would need to research options.
   value_count = scanned_values.tally
-  puts " value count "
-  puts value_count
-  puts " current_zone "
-  puts current_zone.inspect
-  puts " game rules zone value "
-  puts zone_value.inspect
   x_count = value_count["X"].to_i
   o_count = value_count["O"].to_i
-  # Guard clause seems appropriate  ## Problem!!!
+  # It seems simplest to transfer all current values and pass through all unchanged
   new_zone_value = zone_value
+  # Guard clause seems appropriate way to deal with X.  This is the only rule
+  # that would change X
   new_zone_value = "O" if zone_value == "X" && o_count == 3
   if zone_value == "O"
     case o_count
     when 1
       new_zone_value = "X"
     when 2..3
-      new_zone_value = "O"
+      new_zone_value
     when 4..8
       new_zone_value = "X"
     else puts " ERROR "
     end
   end
-  puts " output zone value "
-  puts new_zone_value
   return new_zone_value
 end
 
 #rudimentary UI
-
 system("clear")
-
 3.times { puts "" }
-
 puts "\t\tGen 0\n"
 puts ""
 
@@ -132,12 +124,12 @@ end
 puts "\t\t" + top_row
 puts "\t\t" + mid_row
 puts "\t\t" + bottom_row
-
 3.times { puts "" }
 
 puts "\t\tGen 1\n"
 puts ""
 
+# this initiates the methods and drives the script forward
 generate_next_gen(@board_grid)
 
 @gen1_grid.each_with_index do |(key, value), i|
@@ -160,13 +152,13 @@ end
 puts "\t\t" + g1_top_row
 puts "\t\t" + g1_mid_row
 puts "\t\t" + g1_bottom_row
-
 3.times { puts "" }
 
+# Rudimentary checklist of tasks
   # DONE - ok, shift zero to the center zone of the grid, so the same method will for for checking all adjacent
   # DONE - Move that into a collection
   # DONE - Then remove from the collection anything with a "2"
   # DONE - Use the remaining collection as coordinates to check zone values
   # DONE - Push zone values into a different collection and total instances of O and X
-  # compare counts of values to the rules
-  # use compare results to modify the zone accordingly to O and X
+  # DONE - compare counts of values to the rules
+  # DONE - use compare results to modify the zone accordingly to O and X
