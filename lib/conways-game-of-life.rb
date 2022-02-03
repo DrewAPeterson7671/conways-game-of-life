@@ -17,26 +17,32 @@ def generate_next_gen(grid)
   @gen1_grid = Marshal.load(Marshal.dump(grid))
   @gen1_grid.each do |key, value|
     puts "#{key} \t #{value}"
-    neighbor_scan(key)
-    break
+    neighbor_scan(key, value)
+    break # TO REMOVE
     # neighbor_scan(key)
   end
     
 
 end
 
-def neighbor_scan(coordinates)
+def neighbor_scan(coordinates, zone_value)
   scan_template = [[-1, 1], [0, 1], [1, 1],
-                  [-1, 0], [0, 0], [1, 0],
+                  [-1, 0], [1, 0],
                   [-1, -1], [0, -1], [1, -1]]
+  scan_coordinates = []
   current_zone = coordinates.split(", ")
   scan_template.each do |st|
     st[0] = st[0] + current_zone[0].to_i
     st[1] = st[1] + current_zone[1].to_i
   end
   filter_template = scan_template.select { |a, b| a.abs != 2 && b.abs != 2 }
+  filter_template.each do |ft|
+    scan_coordinates << ft.join(", ")
+  end
   puts " filter_template "
   puts filter_template
+  puts ""
+  puts scan_coordinates
   # ok, shift zero to the center zone of the grid, so the same method will for for checking all adjacent
   # Move that into a collection
   # Then remove from the collection anything with a "2"
