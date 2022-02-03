@@ -1,3 +1,5 @@
+#!/usr/bin/ruby
+# require ('./lib/)
 
 # First I wanted to make the display of the grids for visual confirmation
 # If you look to my git history, I used puts to display each step and confirm it before proceeding
