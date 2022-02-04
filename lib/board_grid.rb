@@ -7,8 +7,8 @@ class BoardGrid
   def self.generate_next_grid
     @generation_grid = Marshal.load(Marshal.dump(@board_grid))
     @generation_grid.each do |key, value|
-      # @zone_value = value  #passing the current zone value
-      new_value = AreaScan.area_scan(key, value)
+      @zone_value = value  #passing the current zone value
+      new_value = AreaScan.area_scan(key)
       # Here is where the new value replaces the old values
       @generation_grid[key] = new_value
     end

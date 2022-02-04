@@ -1,7 +1,8 @@
 class AreaScan
   attr_accessor :scan_template
   
-  def self.area_scan(coordinates, zone_value)
+  def self.area_scan(coordinates)
+    # I would like to take @scan_template out of this method on refactor
     @scan_template = [[-1, 1], [0, 1], [1, 1],
                     [-1, 0], [1, 0],
                     [-1, -1], [0, -1], [1, -1]]
@@ -20,7 +21,8 @@ class AreaScan
 
     # I am passing the zone_value through without using it.  
     # On a refactor, I would like to see if that is avoidable.
-    GameRules.game_rules(@scanned_values, @current_zone, zone_value)
+    GameRules.game_rules(@scanned_values, @current_zone)
+    #zone_value was passed here, it isn't used
   end
 
   def self.adjust_scan_to_current(coordinates)
