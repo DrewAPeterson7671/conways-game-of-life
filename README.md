@@ -67,12 +67,12 @@ DONE - use compare results to modify the zone accordingly to O and X
 ## Refactor
 
 Refactoring to classes
-First thoughts are to give the existing methods a class
-Need to look up proper script structure, haven't actually done a plain Ruby script in a while. 
-I think, without testing, the best approach is extract each method one by one to a class.  Modify it.  Then run the script to ensure it works.
-Making these canges will take some comments out of context, will need to review at the end.
+First thoughts are to give the existing methods a class.
+Need to look up proper script structure, I haven't actually done a plain Ruby script in a while. 
+I think, without testing, the best approach is to extract each method, one by one, to a class and modify it.  Run the script to verify after each class is extracted.  
+Then further break down each class into methods where practical.
+Making these changes will take some comments out of context, will need to review at the end.
 
-Once separated into classes, examine the methods for things that can be separated into other methods.
 
 
 
