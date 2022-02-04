@@ -33,7 +33,7 @@ class AreaScan
     end
     # I am passing the zone_value through without using it.  
     # On a refactor, I would like to see if that is avoidable.
-    game_rules(scanned_values, current_zone, zone_value)
+    GameRules.game_rules(scanned_values, current_zone, zone_value)
   end
 
 end
