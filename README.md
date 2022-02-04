@@ -56,13 +56,13 @@ So that made it essential to use a hash.
 
 ## Midway checklist
 
-DONE - ok, shift zero to the center zone of the grid, so the same method will for for checking all adjacent
-DONE - Move that into a collection
-DONE - Then remove from the collection anything with a "2"
-DONE - Use the remaining collection as coordinates to check zone values
-DONE - Push zone values into a different collection and total instances of O and X
-DONE - compare counts of values to the rules
-DONE - use compare results to modify the zone accordingly to O and X
+DONE - ok, shift zero to the center zone of the grid, so the same method will for for checking all adjacent  
+DONE - Move that into a collection  
+DONE - Then remove from the collection anything with a "2"  
+DONE - Use the remaining collection as coordinates to check zone values  
+DONE - Push zone values into a different collection and total instances of O and X  
+DONE - compare counts of values to the rules  
+DONE - use compare results to modify the zone accordingly to O and X  
 
 ## Refactor
 

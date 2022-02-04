@@ -11,7 +11,6 @@ def display_grid(grid_name)
   top_row = ""; mid_row = ""; bottom_row = ""
   
   grid_name.each_with_index do |(key, value), i|
-    # I wanted to see the original to visually verify what is working
     # There's got to be a better way line the values in 3x3 rows
     case i
     when 0..1
