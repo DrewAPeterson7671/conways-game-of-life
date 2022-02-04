@@ -43,6 +43,14 @@ Start coding
 I don't see an advantage to collections off the top of my head.
 Lets display the board first.
 
+## Refactor
+
+Refactoring to classes
+First thoughts are to give the existing methods a class
+Need to look up proper script structure, haven't actually done a plain Ruby script in a while. 
+I think, without testing, the best approach is extract each method one by one to a class.  Modify it.  Then run the script to ensure it works.
+Making these canges will take some comments out of context, will need to review at the end.
+
 
 
 

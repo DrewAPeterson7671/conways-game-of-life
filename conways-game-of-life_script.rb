@@ -1,5 +1,7 @@
 #!/usr/bin/ruby
-# require ('./lib/)
+require ('./lib/board_grid.rb')
+require ('./lib/area_scan.rb')
+require ('./lib/game_rules.rb')
 
 # First I wanted to make the display of the grids for visual confirmation
 # If you look to my git history, I used puts to display each step and confirm it before proceeding
@@ -18,25 +20,25 @@
 # out of bounds zone would automatically have a absolute value of 2.  And that could be filtered out, covering all directions. 
 # So that made it essential to use a hash.
 
-@board_grid = { "-1, 1" => "O", "0, 1" => "X", "1, 1" => "X", 
-              "-1, 0" => "X", "0, 0" => "O", "1, 0" => "O", 
-              "-1, -1" => "O", "0, -1" => "O", "1, -1" => "X" }
+
+## CHANGING @board_grid from an instance variable
+
 
 # Variables to aid in a rudimentary UI
 g1_top_row = ""; g1_mid_row = ""; g1_bottom_row = ""
 top_row = ""; mid_row = ""; bottom_row = ""
 
-def generate_next_gen(grid)
-  # I'd prefer not to destructively alter the original @board_grid for visual verfication
-  # I don't like using "gen1_grid" as a name, wanted to make it flexible for multiple generation uses
-  # This method seems to be the best place to drive the overall script.
-  @gen1_grid = Marshal.load(Marshal.dump(grid))
-  @gen1_grid.each do |key, value|
-    new_value = neighbor_scan(key, value)
-    # Here is where the new value replaces the old values
-    @gen1_grid[key] = new_value
-  end
-end
+# def generate_next_gen(grid)
+#   # I'd prefer not to destructively alter the original board_grid for visual verfication
+#   # I don't like using "gen1_grid" as a name, wanted to make it flexible for multiple generation uses
+#   # This method seems to be the best place to drive the overall script.
+#   @gen1_grid = Marshal.load(Marshal.dump(grid))
+#   @gen1_grid.each do |key, value|
+#     new_value = neighbor_scan(key, value)
+#     # Here is where the new value replaces the old values
+#     @gen1_grid[key] = new_value
+#   end
+# end
 
 def neighbor_scan(coordinates, zone_value)
   scan_template = [[-1, 1], [0, 1], [1, 1],
@@ -58,14 +60,14 @@ def neighbor_scan(coordinates, zone_value)
   end
   # filter_template removes all the out of bounds zones the template generated
   filter_template = scan_template.select { |a, b| a.abs != 2 && b.abs != 2 }
-  # This puts together the arrays to more easily use them to match to the @board_grid keys
+  # This puts together the arrays to more easily use them to match to the board_grid keys
   filter_template.each do |ft|
     scan_coordinates << ft.join(", ")
   end
   # This block finds the values surrounding each zone one at a time
   # It stores all the values in the scanned_values array
   scan_coordinates.each do |sc|
-    @board_grid.select do |key, value| 
+    ::BoardGrid.instance_variable_get(:@board_grid).select do |key, value| 
       scanned_values << value if key == sc
     end
   end
@@ -104,7 +106,7 @@ system("clear")
 puts "\t\tGen 0\n"
 puts ""
 
-@board_grid.each_with_index do |(key, value), i|
+::BoardGrid.instance_variable_get(:@board_grid).each_with_index do |(key, value), i|
   # I wanted to see the original to visually verify what is working
   # There's got to be a better way line the values in 3x3 rows
   case i
@@ -132,9 +134,11 @@ puts "\t\tGen 1\n"
 puts ""
 
 # this initiates the methods and drives the script forward
-generate_next_gen(@board_grid)
+BoardGrid.new("gen1")
+BoardGrid.generate_next_grid()
 
-@gen1_grid.each_with_index do |(key, value), i|
+#check if attr_reader can be accessed here?
+::BoardGrid.instance_variable_get(:@generation_grid).each_with_index do |(key, value), i|
   case i
   when 0..1
     g1_top_row += "#{value} "
