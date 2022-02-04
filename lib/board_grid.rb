@@ -13,7 +13,7 @@ class BoardGrid
     # This method seems to be the best place to drive the overall script.
     @generation_grid = Marshal.load(Marshal.dump(@board_grid))
     @generation_grid.each do |key, value|
-      new_value = neighbor_scan(key, value)
+      new_value = AreaScan.area_scan(key, value)
       # Here is where the new value replaces the old values
       @generation_grid[key] = new_value
     end
