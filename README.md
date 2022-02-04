@@ -43,6 +43,27 @@ Start coding
 I don't see an advantage to collections off the top of my head.
 Lets display the board first.
 
+
+## Midway
+
+First I wanted to make the display of the grids for visual confirmation.  If you look to my git history, I used puts to display each step and confirm it before proceeding.
+I was very wary of off-by-one error potential at every step.
+
+Originally, I was going to use an array of arrays, then after I stepped away from it for a few hours, I realized that I would have to have methods to check the surrounding neighbor values of corners zones \(such as the upper left corner\), side middle zone \(the middle X in the left side column\) methods and a middle zone method.  And those methods \(except for middle zone\) would have to rotate 90 degrees for each counterpart.  I needed a deeper abstraction.  The only simple perimeter scan of zone values would be the middle zone because it scans 360 degrees around without looking outside of the bounds.  It seemed to me the best way was to find a way to make a single 360 scan method.  But how to deal with the scan looking out of the boundaries of the game?  I stepped away from coding to dinner and it I came up with a solution.  If Then I realized that, if I could make the center zone 0,0, then I just have to reject any out-of-bounds on a single 360 degree scan on each zone because the out of bounds zone would automatically have a absolute value of 2.  And that could be filtered out, covering all directions. 
+
+So that made it essential to use a hash.
+
+
+## Midway checklist
+
+DONE - ok, shift zero to the center zone of the grid, so the same method will for for checking all adjacent
+DONE - Move that into a collection
+DONE - Then remove from the collection anything with a "2"
+DONE - Use the remaining collection as coordinates to check zone values
+DONE - Push zone values into a different collection and total instances of O and X
+DONE - compare counts of values to the rules
+DONE - use compare results to modify the zone accordingly to O and X
+
 ## Refactor
 
 Refactoring to classes
