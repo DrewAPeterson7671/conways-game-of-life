@@ -2,20 +2,8 @@ class BoardGrid
   attr_reader :board_grid
 
   @board_grid = { "-1, 1" => "O", "0, 1" => "X", "1, 1" => "X", 
-    "-1, 0" => "X", "0, 0" => "O", "1, 0" => "O", 
-    "-1, -1" => "O", "0, -1" => "O", "1, -1" => "X" }
-
-  def initialize(gen_name)
-    # to allow for multiple generations
-    @gen_name = gen_name
-    # To allow for different size board sizes
-    # Would require user input or a scripted series of sizes
-    @board_grid = board_grid
-  end
-
-  def gen_name
-    @gen_name
-  end
+                  "-1, 0" => "X", "0, 0" => "O", "1, 0" => "O", 
+                  "-1, -1" => "O", "0, -1" => "O", "1, -1" => "X" }
 
   def self.generate_next_grid
     # This was an instance variable

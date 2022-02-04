@@ -134,7 +134,6 @@ puts "\t\tGen 1\n"
 puts ""
 
 # this initiates the methods and drives the script forward
-BoardGrid.new("gen1")
 BoardGrid.generate_next_grid()
 
 #check if attr_reader can be accessed here?
