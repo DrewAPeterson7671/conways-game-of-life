@@ -72,6 +72,8 @@ Need to look up proper script structure, haven't actually done a plain Ruby scri
 I think, without testing, the best approach is extract each method one by one to a class.  Modify it.  Then run the script to ensure it works.
 Making these canges will take some comments out of context, will need to review at the end.
 
+Once separated into classes, examine the methods for things that can be separated into other methods.
+
 
 
 

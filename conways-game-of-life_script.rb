@@ -3,10 +3,6 @@ require ('./lib/board_grid.rb')
 require ('./lib/area_scan.rb')
 require ('./lib/game_rules.rb')
 
-def big_spacer
-  6.times { puts "" }
-end
-
 def spacer
   3.times { puts "" }
 end
@@ -14,7 +10,7 @@ end
 #rudimentary UI
 system("clear")
 
-big_spacer()
+spacer()
 
 puts "\t\tGen 0\n"
 puts ""
@@ -29,4 +25,4 @@ puts ""
 BoardGrid.generate_next_grid
 BoardGrid.display_generation_grid
 
-big_spacer()
+spacer()
